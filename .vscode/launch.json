@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open index.html",
+            "file": "d:\\Kuliah_301250018\\SMT2\\Pengantar Pemograman\\Tugas\\Faza_301250018_TA\\tamplates\\index.html"
+        }
+    ]
+}
