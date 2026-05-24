@@ -4,46 +4,174 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kalkulator Sederhana</title>
-    <!-- Bootstrap 5.3 CDN -->
+    <title>Konversi Mata Uang</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
     <div class="container-fluid p-0">
+        <!--NavBar-->
         <nav class="navbar navbar-expand-lg navbar-light bg-info">
             <div class="container-fluid">
-
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto justify-content-center w-100">
                         <li class="nav-item">
-                            <a class="nav-link text-dark fs-5" href="index.html">Artimatika</a>
+                            <a class="nav-link text-dark fs-5" href="/">Artimatika</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark fs-5" href="logika.html">Logika</a>
+                            <a class="nav-link text-dark fs-5" href="/logika.html">Logika</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active fw-bold text-dark fs-5" aria-current="page"
-                                href="mata_uang.html">Mata uang</a>
+                                href="/mata_uang.html">Mata uang</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark fs-5" href="suhu.html">Suhu</a>
+                            <a class="nav-link text-dark fs-5" href="/suhu.html">Suhu</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark fs-5" href="fakbonaci.html">Fibonaci Faktorial</a>
+                            <a class="nav-link text-dark fs-5" href="/fakbonaci.html">Fibonaci Faktorial</a>
                         </li>
                     </ul>
                 </div>
-
             </div>
         </nav>
+        <!--end navbar-->
+
+        <!--Konversi Mata Uang-->
+        <div class="container p-4">
+            <div class="card-shadow p-4" style="height: auto; min-height: 60vh; width: 440px;">
+                <p class="text-center fs-5 fw-bold">Konversi Mata Uang</p>
+
+                <!-- Input jumlah -->
+                <input type="text" id="display" class="form-control screen mb-3" value="0" readonly>
+
+                <!-- Pilih mata uang asal -->
+                <p class="text-center fw-bold mb-2" style="color:#1a3c40; font-size:0.85rem;">MATA UANG ASAL</p>
+                <div class="row g-2 mb-3">
+                    <div class="col-3">
+                        <button id="btn-IDR" class="btn btn-light calc-btn rounded-pill w-100 btn-unit aktif"
+                            onclick="setMataUang('IDR')">IDR</button>
+                    </div>
+                    <div class="col-3">
+                        <button id="btn-USD" class="btn btn-light calc-btn rounded-pill w-100 btn-unit"
+                            onclick="setMataUang('USD')">USD</button>
+                    </div>
+                    <div class="col-3">
+                        <button id="btn-EUR" class="btn btn-light calc-btn rounded-pill w-100 btn-unit"
+                            onclick="setMataUang('EUR')">EUR</button>
+                    </div>
+                    <div class="col-3">
+                        <button id="btn-JPY" class="btn btn-light calc-btn rounded-pill w-100 btn-unit"
+                            onclick="setMataUang('JPY')">JPY</button>
+                    </div>
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-4">
+                        <button id="btn-SGD" class="btn btn-light calc-btn rounded-pill w-100 btn-unit"
+                            onclick="setMataUang('SGD')">SGD</button>
+                    </div>
+                    <div class="col-4">
+                        <button id="btn-GBP" class="btn btn-light calc-btn rounded-pill w-100 btn-unit"
+                            onclick="setMataUang('GBP')">GBP</button>
+                    </div>
+                    <div class="col-4">
+                        <button id="btn-AUD" class="btn btn-light calc-btn rounded-pill w-100 btn-unit"
+                            onclick="setMataUang('AUD')">AUD</button>
+                    </div>
+                </div>
+
+                <!-- Keypad angka -->
+                <div class="container-fluid p-0">
+                    <div class="row g-3 mb-3">
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('7')">7</button></div>
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('8')">8</button></div>
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('9')">9</button></div>
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="backspace()">⌫</button></div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('4')">4</button></div>
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('5')">5</button></div>
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('6')">6</button></div>
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="clearScreen()">AC</button></div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('1')">1</button></div>
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('2')">2</button></div>
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('3')">3</button></div>
+                        <div class="col-3"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('.')">.</button></div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-6"><button class="btn btn-light calc-btn rounded-pill w-100" onclick="appendInput('0')">0</button></div>
+                        <div class="col-6"><button class="btn btn-primary calc-btn rounded-pill w-100" onclick="konversi()">Konversi</button></div>
+                    </div>
+                </div>
+
+                <!-- Hasil Konversi -->
+                <div id="hasilKonversi" class="hasil-konversi d-none mt-3">
+                    <p class="fw-bold mb-2 text-center" style="font-size:0.85rem; color:#1a3c40;">HASIL KONVERSI</p>
+                    <div class="row"><div class="col-5 fw-bold">IDR</div><div class="col-7 text-end" id="r-IDR">-</div></div>
+                    <div class="row"><div class="col-5 fw-bold">USD</div><div class="col-7 text-end" id="r-USD">-</div></div>
+                    <div class="row"><div class="col-5 fw-bold">EUR</div><div class="col-7 text-end" id="r-EUR">-</div></div>
+                    <div class="row"><div class="col-5 fw-bold">JPY</div><div class="col-7 text-end" id="r-JPY">-</div></div>
+                    <div class="row"><div class="col-5 fw-bold">SGD</div><div class="col-7 text-end" id="r-SGD">-</div></div>
+                    <div class="row"><div class="col-5 fw-bold">GBP</div><div class="col-7 text-end" id="r-GBP">-</div></div>
+                    <div class="row"><div class="col-5 fw-bold">AUD</div><div class="col-7 text-end" id="r-AUD">-</div></div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        const display = document.getElementById('display');
+        let mataUangAsal = 'IDR';
+
+        function setMataUang(kode) {
+            mataUangAsal = kode;
+            document.querySelectorAll('.btn-unit').forEach(btn => btn.classList.remove('aktif'));
+            document.getElementById('btn-' + kode).classList.add('aktif');
+        }
+
+        function appendInput(val) {
+            if (display.value === '0') {
+                display.value = val === '.' ? '0.' : val;
+            } else {
+                if (val === '.' && display.value.includes('.')) return;
+                display.value += val;
+            }
+        }
+
+        function clearScreen() { display.value = '0'; }
+
+        function backspace() {
+            display.value = display.value.length > 1 ? display.value.slice(0, -1) : '0';
+        }
+
+        function konversi() {
+            const jumlah = parseFloat(display.value) || 0;
+
+            fetch('/api/kalkulator', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'mata_uang', dari: mataUangAsal, jumlah: jumlah })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) { display.value = 'Error'; return; }
+                document.getElementById('hasilKonversi').classList.remove('d-none');
+                const hasil = data.hasil;
+                ['IDR','USD','EUR','JPY','SGD','GBP','AUD'].forEach(k => {
+                    const el = document.getElementById('r-' + k);
+                    if (el && hasil[k] !== undefined) el.textContent = hasil[k];
+                });
+            })
+            .catch(() => { display.value = 'Error'; });
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
