@@ -1,92 +1,122 @@
-.navbar-nav .nav-link:hover {
-    color: #000000 !important;
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    transition: all 0.3s ease;
+/* ==========================================================================
+   STYLE UTAMA KALKULATOR MULTIFUNGSI - FAZA
+   ========================================================================== */
 
-}
-
-.calculator-box {
-    background-color: #7cb9c4;
-    border-radius: 20px;
-    padding: 30px;
-    width: 400px;
-    box-shadow: inset 0 4px 6px rgba(255, 255, 255, 0.4), 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-.nav-item {
-    padding-left: 50px;
-}
-
-.container-fluid {
-    height: 8vh;
-}
-
-.card-shadow {
-    background-color: #7cb9c4;
-    border-radius: 10px;
-    padding: 30px;
-    margin: 0 auto;
-    width: 60px;
-    height: 10vh;
-    box-shadow: inset 0 4px 6px rgba(255, 255, 255, 0.4), 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-.screen {
-    font-size: 2.5rem;
-    font-weight: bold;
-    text-align: right;
-    background-color: #f0f4f8 !important;
-    border: 2px solid #333;
-    border-radius: 10px;
-    padding: 15px;
-}
-
-.calc-btn {
-    font-weight: bold;
-    font-size: 1.1rem;
-    padding: 12px 0;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
-}
-
-/* ── Background halaman – cocok dengan navbar bg-info dan kalkulator #7cb9c4 ── */
+/* Pengaturan dasar halaman web */
 body {
-    background: linear-gradient(160deg, #e0f7fa 0%, #b2ebf2 40%, #80deea 100%);
+    background-color: #7cb9c4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
     margin: 0;
 }
 
-/* ── Tabel hasil konversi (digunakan di suhu & mata_uang) ── */
-.hasil-konversi {
-    background-color: rgba(255, 255, 255, 0.55);
-    border-radius: 8px;
-    padding: 10px 14px;
-    margin-top: 10px;
-    font-size: 0.95rem;
+/* --- STYLE NAVBAR --- */
+.navbar-nav .nav-link {
+    padding: 8px 16px;
+    transition: all 0.3s ease;
 }
 
-.hasil-konversi .row {
-    border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
-    padding: 4px 0;
+.navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
 }
 
-.hasil-konversi .row:last-child {
-    border-bottom: none;
+.nav-item {
+    padding-left: 20px;
 }
 
-/* ── Tombol unit aktif (Suhu / Mata uang) ── */
-.btn-unit.aktif {
+
+/* --- WADAH UTAMA KALKULATOR (MENYATUKAN DUA SELECTOR CLASSMU) --- */
+.card-shadow,
+.calculator-box {
+    background-color: #7cb9c4 !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    margin: 40px auto !important;
+    width: 100% !important;
+    max-width: 440px !important;
+    height: auto !important;
+    box-shadow: inset 0 4px 6px rgba(255, 255, 255, 0.4),
+        0 15px 35px rgba(0, 0, 0, 0.15) !important;
+}
+
+
+/* --- PANEL LAYAR UTAMA (SCREEN) --- */
+.screen {
+    font-size: 2.2rem !important;
+    font-weight: bold !important;
+    text-align: right !important;
+    background-color: #f0f4f8 !important;
+    color: #212529 !important;
+    border: 2px solid rgba(0, 0, 0, 0.15) !important;
+    border-radius: 12px !important;
+    padding: 12px 20px !important;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+
+/* --- TOMBOL-TOMBOL UTAMA KALKULATOR --- */
+.calc-btn {
+    font-weight: bold !important;
+    font-size: 1.1rem !important;
+    padding: 14px 0 !important;
+    border: none !important;
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.1s ease !important;
+}
+
+/* Efek saat kursor menyentuh tombol */
+.calc-btn:hover {
+    background-color: #e9ecef !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Efek mendem saat tombol ditekan */
+.calc-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+
+/* --- MODIFIKASI KHUSUS TOMBOL MATA UANG ATAS --- */
+/* Style dasar tombol mata uang asal saat tidak dipilih */
+.btn-currency {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    font-weight: bold !important;
+    border-radius: 12px !important;
+    border: none !important;
+    padding: 10px 0 !important;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.08) !important;
+    transition: all 0.2s ease;
+}
+
+/* Efek hover biasa (saat kursor nempel sebelum diklik) */
+.btn-currency:hover {
+    background-color: #e2e6ea !important;
+    transform: translateY(-1px);
+}
+
+/* KUNCI WARNA: Saat tombol berhasil diklik dan berstatus aktif */
+.btn-currency.active {
     background-color: #0d6efd !important;
-    color: #fff !important;
+    /* Biru pekat Bootstrap */
+    color: #ffffff !important;
+    /* Teks putih */
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3) !important;
+    transform: scale(0.95);
+    /* Sedikit mengecil memberikan efek ditekan */
 }
 
-/* ── Hasil Fibonacci & Faktorial ── */
-.hasil-box {
-    background-color: rgba(255, 255, 255, 0.6);
-    border-radius: 8px;
-    padding: 10px 14px;
-    margin-top: 10px;
-    font-size: 0.9rem;
-    word-break: break-all;
-    line-height: 1.6;
+/* --- STYLE BASE TOMBOL PILIHAN MODE ARITMATIKA --- */
+/* 1. Efek Hover Lembut saat Kursor Menempel (Sebelum Diklik) */
+.btn-unit:hover {
+    background-color: #f1f3f5 !important;
+    color: #000000 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08) !important;
 }

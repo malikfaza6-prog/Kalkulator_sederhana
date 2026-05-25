@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 import math
 
-# Konfigurasi Flask - folder template 'tamplates' sesuai struktur folder proyek Anda
-app = Flask(__name__, template_folder='tamplates', static_folder='tamplates', static_url_path='/static')
+# FIX 1: Konfigurasi folder template 'tamplates' dan static 'static' sesuai struktur asli proyek Anda
+app = Flask(__name__, template_folder='tamplates', static_folder='static')
 
 # ─────────────────────────────────────────────────────────
 #  ROUTING HALAMAN (Render HTML)
@@ -31,7 +31,6 @@ def fakbonaci():
 
 # ─────────────────────────────────────────────────────────
 #  ENDPOINT API UTAMA  →  POST /api/kalkulator
-#  Body JSON: { "mode": "...", ...parameter lain... }
 # ─────────────────────────────────────────────────────────
 
 @app.route('/api/kalkulator', methods=['POST'])
@@ -40,7 +39,8 @@ def kalkulator():
     if not data:
         return jsonify({'error': 'Data JSON tidak ditemukan'}), 400
 
-    mode = data.get('mode', '')
+    # FIX 2: Mendukung pembacaan key 'fitur' dari JavaScript atau 'mode'
+    mode = data.get('fitur' if 'fitur' in data else 'mode', '')
 
     if mode == 'aritmatika':
         return hitung_aritmatika(data)
@@ -55,7 +55,7 @@ def kalkulator():
     elif mode == 'faktorial':
         return hitung_faktorial(data)
     else:
-        return jsonify({'error': f'Mode tidak dikenali: {mode}'}), 400
+        return jsonify({'error': f'Mode/Fitur tidak dikenali: {mode}'}), 400
 
 
 # ─────────────────────────────────────────────────────────
@@ -63,16 +63,11 @@ def kalkulator():
 # ─────────────────────────────────────────────────────────
 
 def hitung_aritmatika(data):
-    """
-    Input  : { "mode": "aritmatika", "expression": "sin(90)+cos(0)*2" }
-    Output : { "result": "3" }
-    """
     try:
         expression = data.get('expression', '').strip()
         if not expression:
             return jsonify({'result': 'Error: ekspresi kosong'})
 
-        # Namespace aman – sin/cos menerima derajat
         safe_ns = {
             'sin': lambda x: round(math.sin(math.radians(x)), 10),
             'cos': lambda x: round(math.cos(math.radians(x)), 10),
@@ -81,7 +76,6 @@ def hitung_aritmatika(data):
 
         result = eval(expression, safe_ns)
 
-        # Rapikan desimal
         if isinstance(result, float):
             result = round(result, 10)
             if result == int(result):
@@ -100,11 +94,6 @@ def hitung_aritmatika(data):
 # ─────────────────────────────────────────────────────────
 
 def hitung_logika(data):
-    """
-    Input  : { "mode": "logika", "operasi": "AND", "a": 5, "b": 3 }
-    Output : { "result": 1, "biner_a": "0b101", "biner_b": "0b11", "biner_result": "0b1" }
-    Operasi: AND, OR, XOR, NOT, NAND, NOR, XNOR
-    """
     try:
         operasi = data.get('operasi', '').upper()
         a = int(data.get('a', 0))
@@ -142,10 +131,9 @@ def hitung_logika(data):
 
 
 # ─────────────────────────────────────────────────────────
-#  3. MATA UANG  (Konversi ke semua valuta sekaligus)
+#  3. MATA UANG 
 # ─────────────────────────────────────────────────────────
 
-# Kurs statis – 1 satuan valuta = X IDR
 KURS = {
     'IDR': 1,
     'USD': 16300,
@@ -158,50 +146,59 @@ KURS = {
 }
 
 def hitung_mata_uang(data):
-    """
-    Input  : { "mode": "mata_uang", "dari": "USD", "jumlah": 10 }
-    Output : { "hasil": { "IDR": "163,000", "EUR": "9.1573", ... } }
-    """
     try:
+        # 1. Baca mata uang asal (misal: IDR, USD, EUR) dari JavaScript
         dari = data.get('dari', 'IDR').upper()
-        jumlah = float(data.get('jumlah', 0))
+        
+        # 2. Mengakomodasi jika javascript mengirim parameter 'nilai' atau 'jumlah'
+        jumlah = float(data.get('jumlah' if 'jumlah' in data else 'nilai', 0))
 
+        # Cek apakah mata uang asal terdaftar di data KURS
         if dari not in KURS:
-            return jsonify({'error': f'Mata uang tidak dikenal: {dari}'}), 400
+            return jsonify({'error': f'Mata uang asal ({dari}) tidak didukung'}), 400
 
+        # 3. RUMUS UTAMA: Konversi nominal ke Rupiah (IDR) sebagai dasar/pivot dasar
         nilai_idr = jumlah * KURS[dari]
 
+        # 4. MODIFIKASI UTAMA: Hitung hasil ke SEMUA mata uang sekaligus untuk tabel bawaan
         hasil = {}
         for kode, rate in KURS.items():
-            nilai = nilai_idr / rate
+            nilai_konversi = nilai_idr / rate
+            
+            # Format desimal sesuai jenis mata uangnya
             if kode == 'IDR':
-                hasil[kode] = f"{nilai:,.0f}"
+                hasil[kode] = f"{nilai_konversi:,.0f}"
             elif kode == 'JPY':
-                hasil[kode] = f"{nilai:,.2f}"
+                hasil[kode] = f"{nilai_konversi:,.2f}"
             else:
-                hasil[kode] = f"{nilai:,.4f}"
+                hasil[kode] = f"{nilai_konversi:,.4f}"
 
-        return jsonify({'dari': dari, 'jumlah': jumlah, 'hasil': hasil})
+        # 5. Kembalikan data dalam bentuk dictionary 'hasil' agar dibaca mulus oleh loop JavaScript kamu
+        return jsonify({
+            'dari': dari, 
+            'jumlah': jumlah, 
+            'hasil': hasil
+        })
 
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
-
+    @app.route('/api/kalkulator', methods=['POST'])
+    def api_kalkulator():
+        data = request.get_json()
+        if data and data.get('mode') == 'mata_uang':
+            # Fungsi hitung_mata_uang sekarang bisa melihat KURS karena KURS ada di atasnya
+            return hitung_mata_uang(data)
+        return jsonify({'error': 'Mode tidak dikenali'}), 400
 # ─────────────────────────────────────────────────────────
-#  4. SUHU  (Konversi ke semua satuan sekaligus)
+#  4. SUHU
 # ─────────────────────────────────────────────────────────
 
 def hitung_suhu(data):
-    """
-    Input  : { "mode": "suhu", "dari": "C", "nilai": 100 }
-    Output : { "hasil": { "C": 100, "F": 212, "K": 373.15, "R": 80 } }
-    Satuan : C, F, K, R
-    """
     try:
         dari = data.get('dari', 'C').upper()
         nilai = float(data.get('nilai', 0))
 
-        # Pivot ke Celsius
         if dari == 'C':
             c = nilai
         elif dari == 'F':
@@ -231,10 +228,6 @@ def hitung_suhu(data):
 # ─────────────────────────────────────────────────────────
 
 def hitung_fibonacci(data):
-    """
-    Input  : { "mode": "fibonacci", "n": 10 }
-    Output : { "n": 10, "fibonacci_ke_n": 55, "deret": [0,1,1,...,55] }
-    """
     try:
         n = int(data.get('n', 0))
 
@@ -264,10 +257,6 @@ def hitung_fibonacci(data):
 # ─────────────────────────────────────────────────────────
 
 def hitung_faktorial(data):
-    """
-    Input  : { "mode": "faktorial", "n": 7 }
-    Output : { "n": 7, "hasil": 5040, "notasi": "7! = 5040" }
-    """
     try:
         n = int(data.get('n', 0))
 
@@ -287,10 +276,6 @@ def hitung_faktorial(data):
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
-
-# ─────────────────────────────────────────────────────────
-#  JALANKAN APLIKASI
-# ─────────────────────────────────────────────────────────
 
 if __name__ == '__main__':
     app.run(debug=True)
