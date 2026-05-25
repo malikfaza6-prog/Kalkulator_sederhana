@@ -120,3 +120,89 @@ body {
     transform: translateY(-1px) !important;
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08) !important;
 }
+
+/* --- TEMA DARK MODE MODERN (MIDNIGHT) --- */
+body.dark-theme {
+    background-color: #0f172a !important;
+    /* Warna hitam kebiruan Slate yang mewah */
+    color: #f8fafc !important;
+}
+
+/* Navbar saat Dark Mode */
+body.dark-theme .navbar,
+body.dark-theme nav,
+body.dark-theme .bg-info,
+/* Ganti dengan class warna navbar birumu saat ini */
+body.dark-theme div[style*="background-color"] {
+    background-color: #1e293b !important;
+    /* Biru gelap serasi */
+    border-bottom: 1px solid #334155 !important;
+}
+
+/* Teks Navigasi atas saat Dark Mode agar terbaca jelas */
+body.dark-theme .nav-link,
+body.dark-theme a,
+body.dark-theme nav div,
+body.dark-theme .navbar-brand {
+    color: #cbd5e1 !important;
+}
+
+body.dark-theme .active {
+    color: #38bdf8 !important;
+}
+
+body.dark-theme .card,
+body.dark-theme .calculator-box,
+body.dark-theme div[style*="background-color: #79bcc7"] {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+
+body.dark-theme .form-control,
+body.dark-theme #display {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+
+body.dark-theme .calc-btn,
+body.dark-theme .btn-light {
+    background-color: #334155 !important;
+    color: #f1f5f9 !important;
+    border: 1px solid #475569 !important;
+}
+
+body.dark-theme .calc-btn:hover,
+body.dark-theme .btn-light:hover {
+    background-color: #475569 !important;
+    color: #ffffff !important;
+}
+
+
+body.dark-theme .btn-primary {
+    background-color: #0284c7 !important;
+    border-color: #0284c7 !important;
+}
+
+
+#darkModeToggle {
+    min-width: 110px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* --- Mengubah Bodi Kalkulator Menggunakan Class Aslimu --- */
+body.dark-theme .card-shadow {
+    background-color: #1e293b !important;
+    /* Mengubah warna toska menjadi biru gelap */
+    border: 1px solid #475569 !important;
+    /* Garis tepi tipis agar makin tegas */
+
+    /* Efek bayangan putih bercahaya (glow effect) */
+    box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2) !important;
+}
