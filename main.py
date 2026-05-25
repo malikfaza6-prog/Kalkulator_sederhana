@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 import math
 
-# FIX 1: Konfigurasi folder template 'tamplates' dan static 'static' sesuai struktur asli proyek Anda
-app = Flask(__name__, template_folder='tamplates', static_folder='static')
+# FIX 1: Konfigurasi folder template 'template' dan static 'static' sesuai struktur asli proyek Anda
+app = Flask(__name__, template_folder='template', static_folder='static')
 
 # ─────────────────────────────────────────────────────────
 #  ROUTING HALAMAN (Render HTML)
