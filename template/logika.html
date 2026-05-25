@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kalkulator Logika</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container-fluid p-0">
+        <!--NavBar-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-info">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto justify-content-center w-100">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark fs-5" href="/">Artimatika</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active fw-bold text-dark fs-5" aria-current="page"
+                                href="/logika.html">Logika</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark fs-5" href="/mata_uang.html">Mata uang</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark fs-5" href="/suhu.html">Suhu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark fs-5" href="/fakbonaci.html">Fibonaci Faktorial</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!--end navbar-->
+
+        <!--Kalkulator Logika-->
+        <div class="container p-4">
+            <div class="card-shadow p-4" style="height: auto; min-height: 60vh;">
+                <p class="text-center fs-5 fw-bold">Kalkulator Logika</p>
+
+                <!-- Layar Hasil -->
+                <input type="text" id="display" class="form-control screen mb-3" value="0" readonly>
+
+                <!-- Input A dan B -->
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <input type="number" id="inputA" class="form-control text-center fw-bold" placeholder="Nilai A"
+                            value="0">
+                    </div>
+                    <div class="col-6">
+                        <input type="number" id="inputB" class="form-control text-center fw-bold" placeholder="Nilai B"
+                            value="0">
+                    </div>
+                </div>
+
+                <!-- Tombol Operasi Logika -->
+                <div class="container-fluid p-0">
+                    <div class="row g-3 mb-3">
+                        <div class="col-3">
+                            <button class="btn btn-light calc-btn rounded-pill w-100"
+                                onclick="hitungLogika('AND')">AND</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-light calc-btn rounded-pill w-100"
+                                onclick="hitungLogika('OR')">OR</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-light calc-btn rounded-pill w-100"
+                                onclick="hitungLogika('XOR')">XOR</button>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-light calc-btn rounded-pill w-100"
+                                onclick="hitungLogika('NOT')">NOT</button>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-4">
+                            <button class="btn btn-light calc-btn rounded-pill w-100"
+                                onclick="hitungLogika('NAND')">NAND</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-light calc-btn rounded-pill w-100"
+                                onclick="hitungLogika('NOR')">NOR</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-light calc-btn rounded-pill w-100"
+                                onclick="hitungLogika('XNOR')">XNOR</button>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <button class="btn btn-secondary calc-btn rounded-pill w-100" onclick="clearLogika()">AC /
+                                Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hasil Detail -->
+                <div id="hasilDetail" class="hasil-box d-none mt-3">
+                    <div><strong>Operasi :</strong> <span id="resOperasi">-</span></div>
+                    <div><strong>A (desimal) :</strong> <span id="resA">-</span> | <strong>Biner:</strong> <span
+                            id="resBinA">-</span></div>
+                    <div><strong>B (desimal) :</strong> <span id="resB">-</span> | <strong>Biner:</strong> <span
+                            id="resBinB">-</span></div>
+                    <div><strong>Hasil (desimal) :</strong> <span id="resHasil">-</span> | <strong>Biner:</strong> <span
+                            id="resBinHasil">-</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+
+        function hitungLogika(operasi) {
+            const a = parseInt(document.getElementById('inputA').value) || 0;
+            const b = parseInt(document.getElementById('inputB').value) || 0;
+
+            fetch('/api/kalkulator', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'logika', operasi: operasi, a: a, b: b })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        display.value = 'Error: ' + data.error;
+                        return;
+                    }
+                    display.value = data.result;
+
+                    // Tampilkan detail
+                    document.getElementById('hasilDetail').classList.remove('d-none');
+                    document.getElementById('resOperasi').textContent = data.operasi;
+                    document.getElementById('resA').textContent = data.a;
+                    document.getElementById('resB').textContent = data.b;
+                    document.getElementById('resBinA').textContent = data.biner_a;
+                    document.getElementById('resBinB').textContent = data.biner_b;
+                    document.getElementById('resHasil').textContent = data.result;
+                    document.getElementById('resBinHasil').textContent = data.biner_result;
+                })
+                .catch(() => { display.value = 'Error'; });
+        }
+
+        function clearLogika() {
+            display.value = '0';
+            document.getElementById('inputA').value = '0';
+            document.getElementById('inputB').value = '0';
+            document.getElementById('hasilDetail').classList.add('d-none');
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
