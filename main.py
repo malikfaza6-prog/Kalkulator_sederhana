@@ -136,7 +136,7 @@ def hitung_logika(data):
 
 KURS = {
     'IDR': 1,
-    'USD': 16300,
+    'USD': 17300,
     'EUR': 17800,
     'SGD': 12100,
     'JPY': 109,
